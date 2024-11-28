@@ -70,7 +70,7 @@ public class AuthenticationController {
             String fileUrl = cloudinaryService.uploadFile(file.getBytes(), fileName);
 
             userService.updateUserProfileImage(userId, fileUrl);
-            return ResponseEntity.ok("Imagem carregada com sucesso: " + fileUrl);
+            return ResponseEntity.ok("Imagem carregada com sucesso");
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar a imagem.");

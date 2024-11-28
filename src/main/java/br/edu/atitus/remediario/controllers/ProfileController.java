@@ -2,7 +2,6 @@ package br.edu.atitus.remediario.controllers;
 
 import br.edu.atitus.remediario.dtos.request.ProfileRequestDTO;
 import br.edu.atitus.remediario.dtos.response.ProfileResponseDTO;
-import br.edu.atitus.remediario.dtos.response.RegisterResponseDTO;
 import br.edu.atitus.remediario.dtos.response.SelectedProfileResponseDTO;
 import br.edu.atitus.remediario.entities.ProfileEntity;
 import br.edu.atitus.remediario.entities.UserEntity;
