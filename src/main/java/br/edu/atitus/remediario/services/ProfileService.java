@@ -5,10 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import br.edu.atitus.remediario.dtos.response.ProfileResponseDTO;
 import br.edu.atitus.remediario.entities.ProfileEntity;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.ProfileRepository;
@@ -23,6 +21,23 @@ public class ProfileService {
     private MedicamentoService medicamentoService;
     
     private Integer indice = 0;
+    
+    public boolean isProfileOwner(UUID profileId, UUID userId) {
+        ProfileEntity profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado"));
+
+        return profile.getUser().getId().equals(userId);
+    }
+    
+    public ProfileEntity updateProfile(UUID profileId, String name, String bio) {
+        ProfileEntity profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado"));
+
+        profile.setName(name);
+        profile.setBio(bio);
+        
+        return profileRepository.save(profile);
+    }
     
 
     public ProfileEntity savePerfil(ProfileEntity perfil) {
@@ -42,14 +57,20 @@ public class ProfileService {
         return optionalProfile.orElse(null);
     }
     
-    public int deleteProfile(UUID userId) {
+    public int deleteProfileByUserId(UUID userId) {
     	List<ProfileEntity> userProfiles = getProfilesByUserId(userId);
     	for (ProfileEntity loop : userProfiles) {
-    		medicamentoService.deleteMedicamento(userProfiles.get(indice).getId());
+    		medicamentoService.deleteMedicamentoByPerfilId(userProfiles.get(indice).getId());
     		profileRepository.delete(userProfiles.get(indice));
     		indice = indice+1;
     	}
     	return indice = 0;
+    }
+    
+    public void deleteProfileByProfileId(UUID profileId) {
+    	ProfileEntity userProfiles = getProfileById(profileId);
+    		medicamentoService.deleteMedicamentoByPerfilId(userProfiles.getId());
+    		profileRepository.delete(userProfiles);
     }
 }
 
